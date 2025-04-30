@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Temperatura</title>
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            text-shadow: 1px 1px 2px black;
+            padding: 30px;
+        }
+
+        .contenedor {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+
+        label, p {
+            font-size: 18px;
+        }
+
+        input[type="text"] {
+            padding: 6px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            padding: 8px 16px;
+            margin-top: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Formulario</h1>
+    <div class="contenedor">
+        <h2>Insertar Temperatura</h2>
+        <form id="formularioTemperatura">
+            <label>Valor de Temperatura:</label>
+            <input type="text" name="temperatura" id="temperatura" required>
+            <br><br>
+            <input type="submit" value="Insertar">
+        </form>
+
+        <h2>Última Temperatura Registrada</h2>
+        <div id="resultado">
+            <p>No hay registros todavía.</p>
+        </div>
+    </div>
+
+    <script>
+        const formulario = document.getElementById("formularioTemperatura");
+        const resultado = document.getElementById("resultado");
+
+        function mostrarUltima() {
+            const datos = JSON.parse(localStorage.getItem("ultimaTemperatura"));
+            if (datos) {
+                resultado.innerHTML = `
+                    <p><strong>Valor:</strong> ${datos.valor} °C</p>
+                    <p><strong>Fecha:</strong> ${datos.fecha}</p>
+                `;
+            } else {
+                resultado.innerHTML = "<p>No hay registros todavía.</p>";
+            }
+        }
+
+        formulario.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const temp = document.getElementById("temperatura").value;
+            const fecha = new Date().toLocaleString();
+            const datos = { valor: temp, fecha: fecha };
+            localStorage.setItem("ultimaTemperatura", JSON.stringify(datos));
+            mostrarUltima();
+            formulario.reset();
+        });
+
+        // Mostrar al cargar
+        mostrarUltima();
+    </script>
+</body>
+</html>
